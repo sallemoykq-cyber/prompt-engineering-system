@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering System - Multi-AI Canlı Sistem</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>Prompt<span class="accent">Forge</span></span>
+                </div>
+                <div class="live-badge">
+                    <span class="dot"></span> CANLI SİSTEM
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="platform-indicators">
+                    <span class="p-ind" data-p="chatgpt" title="ChatGPT">🤖</span>
+                    <span class="p-ind" data-p="gemini" title="Gemini">✨</span>
+                    <span class="p-ind" data-p="qwen" title="Qwen">🌙</span>
+                    <span class="p-ind" data-p="zai" title="Z.ai">⚡</span>
+                </div>
+                <button id="historyBtn" class="icon-btn"><i class="fas fa-history"></i></button>
+                <button id="settingsBtn" class="icon-btn"><i class="fas fa-cog"></i></button>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Sidebar - Controls -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-rocket"></i> Platform</h3>
+                    <div class="platform-grid" id="platformGrid">
+                        <!-- JS will fill -->
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-layer-group"></i> Teknik</h3>
+                    <div class="technique-list" id="techniqueList">
+                        <!-- JS -->
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-sliders-h"></i> Ayarlar</h3>
+                    <label class="field-label">Ton</label>
+                    <select id="toneSelect" class="select">
+                        <option value="formal">Resmi / Profesyonel</option>
+                        <option value="friendly" selected>Samimi / Dostane</option>
+                        <option value="expert">Uzman / Teknik</option>
+                        <option value="creative">Yaratıcı</option>
+                        <option value="concise">Kısa / Öz</option>
+                    </select>
+
+                    <label class="field-label">Dil</label>
+                    <select id="langSelect" class="select">
+                        <option value="tr" selected>Türkçe</option>
+                        <option value="en">English</option>
+                        <option value="mixed">Karışık (TR+EN)</option>
+                    </select>
+
+                    <label class="field-label">Çıktı Formatı</label>
+                    <select id="formatSelect" class="select">
+                        <option value="Markdown (başlıklar, listeler)">Markdown</option>
+                        <option value="Düz metin, paragraflar">Düz Metin</option>
+                        <option value="JSON formatında">JSON</option>
+                        <option value="Tablo formatında">Tablo</option>
+                        <option value="Kod bloğu + açıklama">Kod Bloğu</option>
+                        <option value="Rapor formatında (Özet, Detay, Sonuç)">Rapor</option>
+                    </select>
+                </div>
+
+                <div class="sidebar-section api-section">
+                    <h3><i class="fas fa-key"></i> Canlı API (Opsiyonel)</h3>
+                    <p class="hint">API anahtarı girersen gerçek AI testi yapılır. Yoksa simülasyon modunda çalışır.</p>
+                    <input type="password" id="apiChatGPT" placeholder="OpenAI API Key (sk-...)" class="input small">
+                    <input type="password" id="apiGemini" placeholder="Gemini API Key" class="input small">
+                    <input type="password" id="apiQwen" placeholder="Qwen/DashScope Key" class="input small">
+                    <input type="password" id="apiZai" placeholder="Zhipu AI Key" class="input small">
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="content">
+                <div class="input-panel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-edit"></i> Prompt Tasarımı</h2>
+                        <div class="actions">
+                            <button id="clearBtn" class="btn btn-ghost"><i class="fas fa-eraser"></i> Temizle</button>
+                            <button id="exampleBtn" class="btn btn-ghost"><i class="fas fa-lightbulb"></i> Örnek Doldur</button>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label><i class="fas fa-user-tie"></i> Rol / Persona <span class="req">*</span></label>
+                            <input type="text" id="roleInput" class="input" placeholder="Örn: Kıdemli E-Ticaret Stratejisti, 10 yıl deneyimli Python Geliştirici">
+                        </div>
+
+                        <div class="form-group full">
+                            <label><i class="fas fa-bullseye"></i> Görev / İstek <span class="req">*</span></label>
+                            <textarea id="taskInput" class="textarea" rows="4" placeholder="Ne yapılmasını istiyorsunuz? Detaylı yazın. Örn: Shopify mağazam için dönüşüm oranını %30 artıracak bir ürün sayfası metni yaz..."></textarea>
+                            <div class="char-count"><span id="taskCount">0</span> karakter</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-info-circle"></i> Bağlam</label>
+                            <textarea id="contextInput" class="textarea" rows="3" placeholder="Hedef kitle, proje detayları, kısıtlar, mevcut durum..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-users"></i> Hedef Kitle</label>
+                            <input type="text" id="audienceInput" class="input" placeholder="Örn: 25-35 yaş girişimciler, yazılım öğrenenler">
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-ban"></i> Kısıtlar</label>
+                            <input type="text" id="constraintsInput" class="input" placeholder="Örn: 500 kelimeyi geçme, teknik jargon kullanma">
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-book"></i> Örnekler (Few-Shot için)</label>
+                            <textarea id="examplesInput" class="textarea" rows="3" placeholder="Girdi: ... Çıktı: ... şeklinde örnekler"></textarea>
+                        </div>
+                    </div>
+
+                    <button id="generateBtn" class="btn btn-primary btn-generate">
+                        <i class="fas fa-magic"></i> Prompt Oluştur (Canlı)
+                        <span class="shortcut">Ctrl+Enter</span>
+                    </button>
+                </div>
+
+                <div class="output-panel" id="outputPanel" style="display:none">
+                    <div class="output-tabs">
+                        <button class="tab active" data-tab="prompt"><i class="fas fa-code"></i> Oluşturulan Prompt</button>
+                        <button class="tab" data-tab="analysis"><i class="fas fa-chart-bar"></i> Analiz</button>
+                        <button class="tab" data-tab="live"><i class="fas fa-vial"></i> Canlı Test</button>
+                    </div>
+
+                    <div class="tab-content active" id="tab-prompt">
+                        <div class="output-header">
+                            <div class="meta">
+                                <span id="outPlatform" class="badge"></span>
+                                <span id="outTechnique" class="badge badge-tech"></span>
+                                <span id="outTokens" class="badge badge-muted"></span>
+                            </div>
+                            <div class="output-actions">
+                                <button id="optimizeBtn" class="btn btn-small"><i class="fas fa-wand-magic-sparkles"></i> Optimize Et</button>
+                                <button id="copyBtn" class="btn btn-small btn-primary"><i class="fas fa-copy"></i> Kopyala</button>
+                            </div>
+                        </div>
+                        <pre id="promptOutput" class="code-output"></pre>
+                        <div id="systemPromptBox" class="system-prompt-box" style="display:none">
+                            <h4><i class="fas fa-cog"></i> System Prompt (Platforma Özel)</h4>
+                            <pre id="systemOutput"></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-analysis">
+                        <div class="analysis-grid">
+                            <div class="metric-card">
+                                <div class="metric-value" id="scoreValue">--</div>
+                                <div class="metric-label">Kalite Skoru</div>
+                                <div class="metric-bar"><div id="scoreBar" class="bar-fill"></div></div>
+                                <div id="scoreLevel" class="metric-level">-</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="tokenValue">--</div>
+                                <div class="metric-label">Tahmini Token</div>
+                                <div class="metric-sub" id="tokenSub">-</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="wordValue">--</div>
+                                <div class="metric-label">Kelime / Satır</div>
+                                <div class="metric-sub" id="wordSub">-</div>
+                            </div>
+                        </div>
+                        <div class="feedback-section">
+                            <h4><i class="fas fa-check-circle"></i> Geri Bildirim</h4>
+                            <ul id="feedbackList" class="feedback-list"></ul>
+                        </div>
+                        <div class="feedback-section">
+                            <h4><i class="fas fa-lightbulb"></i> İyileştirme Önerileri</h4>
+                            <ul id="suggestionList" class="feedback-list suggestions"></ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-live">
+                        <div class="live-test-header">
+                            <h4><i class="fas fa-flask"></i> Canlı AI Testi</h4>
+                            <button id="runLiveTestBtn" class="btn btn-primary"><i class="fas fa-play"></i> Testi Çalıştır</button>
+                        </div>
+                        <div id="liveTestStatus" class="live-status">Test henüz çalıştırılmadı. "Testi Çalıştır" butonuna basın.</div>
+                        <pre id="liveTestOutput" class="code-output" style="display:none"></pre>
+                        <div id="liveTestMeta" class="live-meta" style="display:none"></div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Panel - Templates & Tips -->
+            <aside class="right-sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-fire"></i> Hazır Şablonlar</h3>
+                    <div id="templateList" class="template-list">
+                        <!-- JS -->
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-graduation-cap"></i> Platform İpuçları</h3>
+                    <div id="platformTips" class="tips-box">
+                        Platform seçin...
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-chart-line"></i> Son İşlemler</h3>
+                    <div id="recentList" class="recent-list">
+                        <p class="hint">Henüz prompt oluşturulmadı</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- History Modal -->
+        <div id="historyModal" class="modal" style="display:none">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-history"></i> Geçmiş</h3>
+                    <button class="icon-btn" id="closeHistory"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-actions">
+                        <button id="clearHistoryBtn" class="btn btn-small btn-danger"><i class="fas fa-trash"></i> Tümünü Sil</button>
+                        <button id="exportHistoryBtn" class="btn btn-small"><i class="fas fa-download"></i> Dışa Aktar</button>
+                    </div>
+                    <div id="historyList" class="history-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>

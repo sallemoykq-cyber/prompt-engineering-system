@@ -88,3 +88,5 @@ julia-*/
 # Zig
 zig*/
 ```
+# Keep history file but ignore content
+# data/history.json

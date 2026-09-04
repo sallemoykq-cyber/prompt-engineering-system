@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Gelişmiş Prompt Mühendisi",
-  "version": "1.0",
-  "description": "Yapay zeka için profesyonel prompt'lar oluşturan gelişmiş araç.",
-  "permissions": ["activeTab", "sidePanel"],
+  "name": "PromptForge - Multi-AI Prompt Mühendisi",
+  "version": "2.0.0",
+  "description": "Gemini, ChatGPT, Qwen, Z.ai için profesyonel prompt'lar oluşturan canlı sistem. Chain of Thought, Few-Shot, ReAct ve daha fazlası.",
+  "permissions": ["activeTab", "sidePanel", "storage"],
+  "host_permissions": ["http://localhost:3000/*", "https://*/*"],
   "action": {
-    "default_title": "Prompt Mühendisi",
+    "default_title": "PromptForge",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",

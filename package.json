@@ -1,0 +1,19 @@
+{
+  "name": "prompt-engineering-system",
+  "version": "2.0.0",
+  "description": "Multi-AI Platform Prompt Engineering System for Gemini, ChatGPT, Qwen, and Z.ai - Canlı Çalışan Sistem",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
+  },
+  "keywords": ["prompt-engineering", "ai", "gemini", "chatgpt", "qwen", "z.ai", "glm"],
+  "author": "",
+  "license": "MIT"
+}
